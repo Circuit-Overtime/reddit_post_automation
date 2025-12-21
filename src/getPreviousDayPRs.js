@@ -182,78 +182,50 @@ async function createMergedPrompt(prs, dateString) {
     .join('\n');
 
   const systemPrompt = `
-                        You are a senior visual narrative designer specializing in nature-inspired comic-book splash panels.
-                        Your role is to transform real software development updates into a single, coherent, vibrant botanical-cybernetic illustration for Pollinations.
+You are a nature-inspired visual storyteller. Transform software updates into a nature-themed flowchart comic illustration.
 
-                        CORE IDENTITY (NON-NEGOTIABLE):
-                        Pollinations represents growth, cross-pollination, openness, ecosystems, and collective flourishing.
-                        All visuals must be nature-first, organic, celebratory, and alive.
+STYLE:
+- Organic flowchart with natural nodes: flowers, trees, branches, wood, twigs, bees, creatures
+- Flowing vines/roots as connectors showing update relationships
+- Comic book illustration style with bold inks and natural colors
+- Celebratory, alive mood
 
-                        ABSOLUTE CONSTRAINTS:
-                        1. Never mention:
-                        - Dates
-                        - Pull request numbers
-                        - Counts as numerals
-                        - GitHub, PRs, commits, repositories, or contributors explicitly
-                        2. Do not explain metaphors or break the illusion.
-                        3. Output ONLY a single image-generation prompt. No commentary.
+VISUAL METAPHORS:
+- Bug fixes → pest removal, pruned branches, cleared blight
+- New features → blooming flowers, sprouting seeds, new growth
+- Documentation → unfurling leaves, knowledge nodes, spore carriers
+- Refactors → reorganized gardens, clearer paths, untangled roots
+- Optimizations → accelerated growth, flowing water, seasonal cycles
+- APIs/integrations → interconnecting vines, mycelium networks, cross-pollination
+- Infrastructure → nesting animals (bees, birds), habitat stabilization
 
-                        INFORMATION PRESERVATION RULE:
-                        Every distinct update provided MUST be represented by a distinct, clearly identifiable natural element in the scene.
-                        Semantic meaning must be preserved exactly through metaphor, not diluted.
+FLOWCHART STRUCTURE:
+- Each update = distinct natural element (unique flower, tree, creature, branch)
+- Connected by organic flowing vines, roots, or creature paths
+- Visual groupings show relationships and dependencies
+- Include movement: wind, pollen drift, flowing water, creature activity
 
-                        NATURE METAPHOR MAPPING (STRICT):
-                        - Bug fixes → pests removed, blight cleared, invasive weeds uprooted, diseased branches pruned
-                        - New features → new flowers blooming, rare plants sprouting, seeds germinating, new species appearing
-                        - Documentation → leaves unfurling with patterns, tree rings revealing knowledge, spores carrying wisdom
-                        - Refactors / cleanup → gardens reorganized, paths clarified, tangled roots separated
-                        - Optimizations / performance → accelerated growth, stronger winds, flowing rivers, seasonal shifts
-                        - APIs / integrations → vines interconnecting ecosystems, mycelium networks, shared root systems
-                        - Tooling / infra → animals arriving (bees, birds, insects), nests forming, habitats stabilizing
-
-                        COUNT REPRESENTATION RULE:
-                        The total number of updates MUST be shown visually through:
-                        - One natural element per update
-                        - Repetition (multiple flowers, vines, creatures, leaves)
-                        - Spatial grouping
-                        Never state quantities explicitly.
-
-                        COMPOSITION REQUIREMENTS:
-                        - Single wide comic-book splash panel
-                        - Central thriving ecosystem (garden, forest, meadow, greenhouse)
-                        - Clear separation between elements representing different updates
-                        - Visual motion: wind, rain, pollen clouds, flowing water, growing vines
-                        - Cooperative agents: gardeners, nature spirits, animals working together
-                        - Visible transformation (before/after energy embedded in the scene)
-
-                        STYLE & ENERGY:
-                        - Bold comic inks
-                        - Organic linework
-                        - Natural color palette only (forest greens, soil browns, sky blues, sunset oranges, floral purples)
-                        - No neon, no cyberpunk aesthetics
-                        - Mood: optimistic, regenerative, celebratory, alive
-
-                        POLLINATIONS SIGNATURE ELEMENTS (WEAVE SUBTLY):
-                        - Bees actively pollinating
-                        - Flowers exchanging pollen
-                        - Seeds traveling between plants
-                        - Ecosystems blending into each other
-                        - Growth spreading outward
-                        Don't put any markdown formatting simply return a single prompt. 
+CONSTRAINTS:
+- No dates, PR numbers, or metrics shown
+- No GitHub/code terminology visible
+- Only output the image generation prompt; no commentary
+- Weave all updates into one coherent natural ecosystem
 `
-const userPrompt = `Generate a NATURE-THEMED comic-book splash panel for these Pollinations AI updates:
-                    ${prList}
-                    BREAKDOWN:
-                    ${categoryText}
-                    Show ${prs.length} distinct natural elements (flowers, vines, animals, growth) - one per update.
-                    Use nature metaphors: bugs = pests removed, features = new blooms, docs = unfurling leaves, optimization = accelerated growth.
-                    Create an EPIC, VIBRANT nature-inspired comic splash panel with:
-                    - Thriving ecosystem (gardens, forests, flowers)
-                    - ${prs.length} DISTINCT natural elements per update
-                    - Dynamic energy (wind, rain, growth)
-                    - Bold comic inks, natural colors (greens, purples, oranges - no neon)
-                    - Celebratory, alive mood
-                    Weave ALL ${prs.length} updates into ONE lush scene with clear visual count representation.`;
+const userPrompt = `Create a nature-themed flowchart as a comic illustration for these Pollinations updates:
+${prList}
+
+BREAKDOWN:
+${categoryText}
+
+Design a flowchart where:
+- ${prs.length} natural elements represent the ${prs.length} updates (distinct flowers, trees, creatures, wood structures)
+- Organic vines, roots, or creature paths connect related updates showing their flow
+- Comic book style with bold inks and natural colors (greens, earth tones, sky blues)
+- Dynamic movement: wind, pollen, flowing water, creature activity
+- Each element clearly distinguishable but part of one cohesive ecosystem
+- Celebratory, regenerative mood
+
+Use nature metaphors for each update type as the visual language.`;
 
   try {
     console.log('Generating merged prompt using Pollinations API...');
