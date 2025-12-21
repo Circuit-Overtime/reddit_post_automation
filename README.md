@@ -1,23 +1,42 @@
-# Getting started with polly-ai
+# polly-ai 🤖
 
-Your project has been created using a Devvit template.
+Automated Reddit bot for r/pollinations_ai subreddit that posts updates about pollinations.ai.
 
-## Next up
+## Overview
 
-Next up is uploading and developing your app using playtest.
+polly-ai automatically posts curated updates to [r/pollinations_ai](https://reddit.com/r/pollinations_ai), keeping the community informed about:
 
-In the project directory, you can run:
+- New models and features
+- Community projects using pollinations.ai
+- API updates and improvements
+- Platform announcements
+
+## Setup
+
+In the project directory:
 
 ### `npm run deploy`
 
-Upload the app to the App Directory. Uploaded apps are only visible to you (the app owner) and can only be installed to a small test subreddit with less than 200 subscribers.
+Upload the bot to the App Directory.
 
 ### `npm run dev`
 
-Installs your app to your test subreddit and starts a playtest session where a new version is installed whenever you save changes to your app code, and logs are continuously streamed.
+Install to test subreddit and start playtest with live code reload and streaming logs.
+
+## About pollinations.ai
+
+[pollinations.ai](https://pollinations.ai) is an open-source gen AI platform powering 500+ community projects with accessible text and image generation APIs. Features include:
+
+- **100% Open Source** — code, decisions, roadmap all public
+- **Privacy-Respecting** — no accounts needed to get started
+- **Audio Generation** — text-to-speech and speech-to-text capabilities
+- **Unified API** — https://gen.pollinations.ai for all AI generation needs
+- **Community-Built** — 500+ projects already using the APIs
 
 ## Learn more
 
-You can learn more in the [documentation](https://developers.reddit.com/docs/).
+- [pollinations.ai](https://pollinations.ai)
+- [API Documentation](https://enter.pollinations.ai/api/docs)
+- [Devvit Documentation](https://developers.reddit.com/docs/)
+- [Developer Portal](https://developers.reddit.com/my/apps)
 
-You can manage your apps in the [developer portal](https://developers.reddit.com/my/apps).
