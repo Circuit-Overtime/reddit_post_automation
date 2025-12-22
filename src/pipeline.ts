@@ -136,7 +136,7 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
     return { prs: allPRs, dateString };
 }
 
-async function createImagePrompt(prs : any[], dateString: string) {
+async function createImagePrompt(prs : any[], dateString: string, pollactionsToken : string) {
     if (!prs || prs.length === 0) {
         return {
             prompt: 'Pollinations: A free, open-source AI image generation platform with community updates',
@@ -159,7 +159,7 @@ Short prompt only. No dates, counts, metadata.`
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.POLLINATIONS_TOKEN}`,
+                'Authorization': `Bearer ${pollactionsToken}`,
             },
             body: JSON.stringify({
                 model: 'openai-large',
@@ -246,10 +246,10 @@ Write in pure plain text, no metadata or extra commentary or markdown`;
     }
 }
 
-async function getPRsAndCreatePrompt(githubToken : string) {
+async function getPRsAndCreatePrompt(githubToken : string, pollactionsToken : string) {
     try {
         const { prs, dateString } = await getMergedPRsFromPreviousDay('pollinations', 'pollinations', githubToken);
-        const promptData = await createImagePrompt(prs, dateString);
+        const promptData = await createImagePrompt(prs, dateString, pollactionsToken);
         console.log('\n=== Generated Image Prompt ===');
         console.log(promptData.prompt);
         console.log('\n');
@@ -262,7 +262,7 @@ async function getPRsAndCreatePrompt(githubToken : string) {
 }
 
 
-async function generateTitleFromPRs(prSummary : string, prCount : string) {
+async function generateTitleFromPRs(prSummary : string, prCount : string, pollactionsToken : string) {
     try {
         const systemPrompt = `You are a Reddit post title generator. Generate a catchy yet descriptive development update title, maximum 12 words. The title must be clear, engaging, and professional, with natural enthusiasm. Avoid brackets, numbers, metrics, emojis, hashtags, or promotional language. Prioritize concrete features or improvements over vague hype.`;
         const userPrompt = `Generate a Reddit post title for this dev update:
@@ -274,7 +274,7 @@ Title only, no explanation.`;
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.POLLINATIONS_TOKEN}`,
+                'Authorization': `Bearer ${pollactionsToken}`,
             },
             body: JSON.stringify({
                 model: 'openai-large',
@@ -307,7 +307,7 @@ Title only, no explanation.`;
     }
 }
 
-async function generateImage(prompt : string, attempt = 0) {
+async function generateImage(prompt : string, pollactionsToken : string, attempt = 0) {
     if (attempt > 0) {
         const delay = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1);
         console.log(`  Retrying in ${delay}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
@@ -319,7 +319,7 @@ async function generateImage(prompt : string, attempt = 0) {
         const response = await fetch(URL, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${process.env.POLLINATIONS_TOKEN}`,
+                'Authorization': `Bearer ${pollactionsToken}`,
             },
             signal: AbortSignal.timeout(120000),
         });
@@ -335,7 +335,7 @@ async function generateImage(prompt : string, attempt = 0) {
     } catch (error) {
         if (attempt < MAX_RETRIES - 1) {
             console.log(`  ✗ Attempt ${attempt + 1} failed: ${(error as any).message}`);
-            return generateImage(prompt, attempt + 1);
+            return generateImage(prompt, pollactionsToken, attempt + 1);
         }
         throw error;
     }
