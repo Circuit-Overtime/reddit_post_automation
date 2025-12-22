@@ -21,14 +21,6 @@ function getPreviousDayRange() {
     };
 }
 
-function ensureOutputDirectory() {
-    const outputDir = path.join(process.cwd(), 'generated_images');
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-        console.log(`✓ Created output directory: ${outputDir}`);
-    }
-    return outputDir;
-}
 
 async function getMergedPRsFromPreviousDay(owner = 'pollinations', repo = 'pollinations', githubToken) {
     if (!githubToken) {
@@ -355,43 +347,5 @@ async function generateImage(prompt, attempt = 0) {
             return generateImage(prompt, attempt + 1);
         }
         throw error;
-    }
-}
-
-async function generateAndSaveComicImage(promptData) {
-    try {
-        console.log('\n=== Generating Comic Image ===\n');
-
-        const outputDir = ensureOutputDirectory();
-        const timestamp = new Date().toISOString().split('T')[0];
-        const filename = `comic-${timestamp}-${Date.now()}.png`;
-        const filepath = path.join(outputDir, filename);
-
-        console.log(`Prompt: ${promptData.prompt.substring(0, 100)}...\n`);
-        console.log(`Generating image...`);
-
-        const imageBuffer = await generateImage(promptData.prompt);
-
-        fs.writeFileSync(filepath, imageBuffer.buffer);
-        const fileSizeKb = (imageBuffer.buffer.length / 1024).toFixed(2);
-
-        console.log(`\n✓ Image saved successfully`);
-        console.log(`  Filename: ${filename}`);
-        console.log(`  Size: ${fileSizeKb} KB\n`);
-
-        return {
-                success: true,
-                buffer: imageBuffer.buffer,
-                url: imageBuffer.url,
-                filename: filename,
-                filepath: filepath,
-                fileSizeKb: fileSizeKb,
-        };
-    } catch (error) {
-        console.error('Error generating image:', error.message);
-        return {
-            success: false,
-            error: error.message,
-        };
     }
 }
