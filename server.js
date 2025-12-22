@@ -395,27 +395,3 @@ async function generateAndSaveComicImage(promptData) {
         };
     }
 }
-
-
-export async function onTrigger(context) {
-    const githubToken = process.env.GITHUB_TOKEN;
-
-    console.log('\n╔════════════════════════════════════════════════════════════╗');
-    console.log('║              TEST IMAGE GENERATION                         ║');
-    console.log('╚════════════════════════════════════════════════════════════╝\n');
-
-    const promptData = await getPRsAndCreatePrompt(githubToken);
-    const result = await generateAndSaveComicImage(promptData);
-    
-    if (!result.success) {
-        console.log('\n❌ Test failed: Failed to generate image');
-        process.exit(1);
-    }
-
-    console.log('\n=== Generating Reddit Post Title ===\n');
-    const title = await generateTitleFromPRs(promptData.summary, promptData.prCount);
-    console.log(`Generated Title: ${title}\n`);
-
-    console.log('\n=== Posting to Reddit ===\n');
-    // code here
-}
