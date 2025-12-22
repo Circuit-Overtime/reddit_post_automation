@@ -1,18 +1,27 @@
-import { Devvit} from '@devvit/public-api';
+import { Devvit, SettingScope} from '@devvit/public-api';
 import {getPRsAndCreatePrompt, generateImage, generateTitleFromPRs } from './pipeline.ts';
-import dotenv from 'dotenv';
-dotenv.config();
+
+Devvit.addSettings([
+  {
+    name: 'github_token',
+    label: 'GitHub Token',
+    type: 'string',
+    isSecret: true,
+    scope: SettingScope.App, 
+  },
+]);
 
 
 Devvit.addMenuItem({
   label: 'Post Pollinations Image',
   location: 'subreddit',
   onPress: async (_, context) => {
-    
-
     try {
-      const githubToken = process.env.GITHUB_TOKEN || '';
-      const promptData = await getPRsAndCreatePrompt(githubToken);
+      const githubToken = await context.settings.get('github_token');
+      if (!githubToken) {
+        throw new Error('GitHub token not configured. Please set it in app settings.');
+      }
+      const promptData = await getPRsAndCreatePrompt(githubToken as string);
       const imageData = await generateImage(promptData.prompt);
       const title = await generateTitleFromPRs(promptData.summary, String(promptData.prCount));
 

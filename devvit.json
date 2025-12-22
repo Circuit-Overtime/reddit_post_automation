@@ -2,8 +2,19 @@
   "name": "polli-ai",
   "permissions": {
     "media": true,
-    "reddit": true
+    "reddit": true,
+    "http": {
+      "domains": ["api.github.com"]
+    }
   },
+  "settings": {
+  "global": {
+    "yourSettingName": {
+      "type": "string",
+      "label": "My Setting"
+    }
+  }
+},
   "blocks": {
     "entry": "src/main.ts"
   },
