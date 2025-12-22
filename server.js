@@ -396,31 +396,6 @@ async function generateAndSaveComicImage(promptData) {
     }
 }
 
-async function postImageToSubreddit(
-    context,
-    subredditName,
-    title,
-    imageBinary
-) {
-    const upload = await context.reddit.uploadMedia({
-        subredditName,
-        mimeType: 'image/png',
-        data: imageBinary,
-    });
-
-    if (!upload || !upload.mediaId) {
-        throw new Error('Reddit image upload failed');
-    }
-
-    const post = await context.reddit.submitPost({
-        subredditName,
-        title,
-        mediaId: upload.mediaId,
-    });
-
-    console.log(`✓ Posted to r/${subredditName}: https://reddit.com${post.permalink}`);
-    return post;
-}
 
 export async function onTrigger(context) {
     const githubToken = process.env.GITHUB_TOKEN;
@@ -442,19 +417,5 @@ export async function onTrigger(context) {
     console.log(`Generated Title: ${title}\n`);
 
     console.log('\n=== Posting to Reddit ===\n');
-    try {
-        await postImageToSubreddit(
-            context,
-            'pollinations_ai',
-            title,
-            result.buffer
-        );
-        
-        console.log('╔════════════════════════════════════════════════════════════╗');
-        console.log('║                  TEST PASSED ✓                            ║');
-        console.log('╚════════════════════════════════════════════════════════════╝\n');
-    } catch (error) {
-        console.log('\n❌ Test failed:', error.message);
-        process.exit(1);
-    }
+    // code here
 }
