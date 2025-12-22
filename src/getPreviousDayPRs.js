@@ -318,7 +318,7 @@ async function getPRsAndCreatePrompt(githubToken) {
     console.log(promptData.prompt);
     console.log('\n');
 
-    return promptData.prompt;
+    return promptData;
   } catch (error) {
     console.error('Error fetching PRs:', error);
     throw error;

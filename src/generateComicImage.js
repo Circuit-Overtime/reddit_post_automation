@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import {getPRsAndCreatePrompt, generateTitleFromPRs} from './getPreviousDayPRs.js';
+import postImageToReddit from './image_post.js';
 
 dotenv.config();
 
@@ -106,22 +107,12 @@ async function testGenerateImage() {
   console.log('║              TEST IMAGE GENERATION                         ║');
   console.log('╚════════════════════════════════════════════════════════════╝\n');
 
-  const promptString = await getPRsAndCreatePrompt(githubToken);
-  const promptData = { prompt: promptString };
+  const promptData = await getPRsAndCreatePrompt(githubToken);
   const result = await generateAndSaveComicImage(promptData);
+  console.log('\nGenerated Image URL:', result.url);
+  const title = await generateTitleFromPRs(promptData.summary, promptData.prCount);
+  const post = await postImageToReddit()
   console.log(result.url);
-
-  if (result.success) {
-    console.log('╔════════════════════════════════════════════════════════════╗');
-    console.log('║                  TEST PASSED ✓                            ║');
-    console.log('╚════════════════════════════════════════════════════════════╝\n');
-    console.log(`File: ${result.filename}`);
-    console.log(`Path: ${result.filepath}`);
-    console.log(`Size: ${result.fileSizeKb} KB\n`);
-  } else {
-    console.log('\n❌ Test failed:', result.error);
-    process.exit(1);
-  }
 }
 
 testGenerateImage().catch(console.error);
