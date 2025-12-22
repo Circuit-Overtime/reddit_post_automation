@@ -185,6 +185,7 @@ Short prompt only. No dates, counts, metadata.`
                 ],
                 temperature: 0.7,
                 max_tokens: 250,
+                seed: 42,
             }),
         });
 
@@ -333,7 +334,7 @@ async function generateImage(prompt, attempt = 0) {
             model: 'nanobanana',
             width: 1024,
             height: 1024,
-            seed: Math.floor(Math.random() * 1000000).toString(),
+            seed: 42,
         });
         const URL = `${POLLINATIONS_IMAGE_API}/${encodeURIComponent(prompt)}?model=${params.get('model')}&width=${params.get('width')}&height=${params.get('height')}&seed=${params.get('seed')}`;
         const response = await fetch(URL, {
@@ -446,7 +447,12 @@ export async function onTrigger(context) {
 
     console.log('\n=== Posting to Reddit ===\n');
     try {
-        await postImageToSubreddit(context, 'pollinations_ai', title, result.buffer);
+        await postImageToSubreddit(
+            context,
+            'pollinations_ai',
+            title,
+            result.buffer
+        );
         
         console.log('╔════════════════════════════════════════════════════════════╗');
         console.log('║                  TEST PASSED ✓                            ║');

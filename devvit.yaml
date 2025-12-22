@@ -1,1 +1,12 @@
 name: polly-ai
+
+permissions:
+  - scope: reddit.managePosts
+    reason: "Post images to subreddit"
+
+triggers:
+  actions:
+    - id: post_pollinations_update
+      name: "📸 Post Pollinations Update"
+      description: "Generate and post weekly Pollinations update to r/pollinations_ai"
+      handler: onTrigger
