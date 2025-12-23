@@ -1,7 +1,7 @@
 npx devvit install pollinations_ai
 npx devvit uninstall pollinations_ai
 npx devvit upload
-npx devvit list installations
+npx devvit list installs
 
 npx devvit list settings
 npx devvit settings set github_token <TOKEN>
