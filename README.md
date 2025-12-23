@@ -33,6 +33,13 @@ Install to test subreddit and start playtest with live code reload and streaming
 - **Unified API** — https://gen.pollinations.ai for all AI generation needs
 - **Community-Built** — 500+ projects already using the APIs
 
+## Fetch Domains
+
+The following domains are requested for this app:
+
+- `api.github.com` - Required to fetch pull requests and repository data from the Pollinations GitHub organization to generate community update posts
+- `gen.pollinations.ai` - Required to generate AI images using Pollinations' image generation API for visual Reddit posts
+
 ## Learn more
 
 - [pollinations.ai](https://pollinations.ai)

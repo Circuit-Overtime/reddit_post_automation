@@ -3,7 +3,7 @@ import {getPRsAndCreatePrompt, generateImage, generateTitleFromPRs } from './pip
 
 Devvit.configure({
   http: {
-    domains: ['https://gen.pollinations.ai', 'https://api.github.com'],
+    domains: ['gen.pollinations.ai', 'api.github.com'],
   },
 });
 
@@ -28,6 +28,7 @@ Devvit.addSettings([
 Devvit.addMenuItem({
   label: 'Post Pollinations Image',
   location: 'subreddit',
+  forUserType: 'moderator',
   onPress: async (_, context) => {
     try {
       const githubToken = await context.settings.get('gh_token');
