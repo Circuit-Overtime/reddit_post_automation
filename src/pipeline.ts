@@ -1,11 +1,12 @@
+import { privateEncrypt } from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const POLLINATIONS_IMAGE_API = 'https://gen.pollinations.ai/image';
 const GITHUB_GRAPHQL_API = 'https://api.github.com/graphql';
 const POLLINATIONS_API = 'https://gen.pollinations.ai/v1/chat/completions';
-const MAX_RETRIES = 3;
-const INITIAL_RETRY_DELAY = 2;
+const MAX_RETRIES = 2;
+const INITIAL_RETRY_DELAY = 5;
 
 function getPreviousDayRange() {
     const now = new Date();
@@ -184,7 +185,10 @@ Short prompt only. No dates, counts, metadata.`
 
         const data = await response.json();
         const generatedPrompt = (data as any).choices?.[0]?.message?.content?.trim();
-
+        if (!data)
+        {
+            console.log("No data returned from Pollinations API");
+        }
         if (!generatedPrompt) {
             throw new Error('No prompt generated from API');
         }
