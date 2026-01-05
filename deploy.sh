@@ -6,8 +6,15 @@ APP_NAME="polli-ai"
 echo "🚀 Starting Pollinations deployment pipeline..."
 echo "📝 Step 1: Generating image prompt and updating link.ts..."
 npx tsx src/pipeline.ts
+PIPELINE_EXIT_CODE=$?
 
-if [ $? -ne 0 ]; then
+if [ $PIPELINE_EXIT_CODE -eq 0 ]; then
+  echo "✓ Pipeline completed successfully"
+  if ! [ -f src/link.ts ] || [ -z "$(grep -o 'const LINK' src/link.ts)" ]; then
+    echo "ℹ️  No merged PRs found. Exiting with success."
+    exit 0
+  fi
+else
   echo "❌ Pipeline failed"
   exit 1
 fi

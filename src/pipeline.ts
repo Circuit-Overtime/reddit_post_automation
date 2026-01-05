@@ -130,11 +130,15 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
 
             cursor = pageInfo.endCursor;
             pageNum++;
+            if (allPRs.length == 0) {
+                return
+            }
         } catch (error) {
             console.error('Fetch error:', error);
             break;
         }
     }
+
 
     console.log(`Found ${allPRs.length} merged PRs from previous day\n`);
     return { prs: allPRs, dateString };
@@ -255,7 +259,14 @@ Write in pure plain text, no metadata or extra commentary or markdown`;
 
 async function getPRsAndCreatePrompt(githubToken : string, pollactionsToken : string) {
     try {
-        const { prs, dateString } = await getMergedPRsFromPreviousDay('pollinations', 'pollinations', githubToken);
+        const result = await getMergedPRsFromPreviousDay('pollinations', 'pollinations', githubToken);
+        
+        if (!result || !result.prs || result.prs.length === 0) {
+            console.log('ℹ️  No merged PRs found in the previous day. Exiting pipeline.');
+            process.exit(0);
+        }
+        
+        const { prs, dateString } = result;
         const promptData = await createImagePrompt(prs, dateString, pollactionsToken);
         console.log('\n=== Generated Image Prompt ===');
         console.log(promptData.prompt);
