@@ -11,17 +11,17 @@ Devvit.addTrigger({
   onEvent: async (event, context) => {
     try {
       console.log('🚀 Starting to post image to Reddit...');
-      // const imageAsset = await context.media.upload({
-      //   url: LINK,
-      //   type: 'image',
-      // });
-      // console.log('✅ Image uploaded to Devvit Media Service:', imageAsset.mediaUrl);
-      // await new Promise((resolve) => setTimeout(resolve, 5000));
+      const imageAsset = await context.media.upload({
+        url: LINK,
+        type: 'image',
+      });
+      console.log('✅ Image uploaded to Devvit Media Service:', imageAsset.mediaUrl);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const post = await context.reddit.submitPost({
         subredditName: "pollinations_ai",
         title: TITLE,
         kind: 'image',
-        imageUrls: [LINK]
+        imageUrls: [imageAsset.mediaUrl],
       });
       console.log(`✅ Posted image with ID: ${post.id}`);
       console.log('Post successful. Exiting...');
