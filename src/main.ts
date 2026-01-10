@@ -10,20 +10,19 @@ Devvit.addTrigger({
   event: 'AppUpgrade',
   onEvent: async (event, context) => {
     try {
-      const imageAsset = await context.media.upload({
-        url: LINK,
-        type: 'image',
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-
+      console.log('🚀 Starting to post image to Reddit...');
+      // const imageAsset = await context.media.upload({
+      //   url: LINK,
+      //   type: 'image',
+      // });
+      // console.log('✅ Image uploaded to Devvit Media Service:', imageAsset.mediaUrl);
+      // await new Promise((resolve) => setTimeout(resolve, 5000));
       const post = await context.reddit.submitPost({
-        subredditName: SUBREDDIT,
+        subredditName: "pollinations_ai",
         title: TITLE,
         kind: 'image',
-        imageUrls: [imageAsset.mediaUrl],
+        imageUrls: [LINK]
       });
-
       console.log(`✅ Posted image with ID: ${post.id}`);
       console.log('Post successful. Exiting...');
       process.exit(0);
@@ -42,11 +41,4 @@ Devvit.addTrigger({
 });
 
 export default Devvit;
-
-
-
-
-
-
-
 

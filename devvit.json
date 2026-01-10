@@ -9,6 +9,6 @@
     "triggers" : ["onAppUpgrade"]
   },
   "dev": {
-    "subreddit": "polli_test"
+    "subreddit": "pollinations_ai"
   }
 }
