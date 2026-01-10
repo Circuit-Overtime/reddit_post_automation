@@ -270,11 +270,28 @@ async function getPRsAndCreatePrompt(githubToken : string, pollactionsToken : st
         
         const { prs, dateString } = result;
         const promptData = await createImagePrompt(prs, dateString, pollactionsToken);
+        console.log(prs)
         console.log('\n=== Generated Image Prompt ===');
         console.log(promptData.prompt);
         console.log('\n');
 
-        return promptData;
+
+        const postTitle = await generateTitleFromPRs(prs.map(p => p.title), pollactionsToken, dateString);
+        console.log('=== Generated Post Title ===');
+        console.log(postTitle);
+        console.log('\n');
+        
+        
+        const imageData = await generateImage(promptData.prompt, pollactionsToken);
+        console.log('=== Generated Image URL ===');
+        console.log(imageData.url);
+        console.log('\n');
+
+        const data = {
+            TITLE: postTitle,
+            LINK: imageData.url,
+        }
+        return data;
     } catch (error) {
         console.error('Error fetching PRs:', error);
         throw error;
@@ -297,11 +314,12 @@ async function generateTitleFromPRs(prs : Array<string>,  pollactionsToken : str
         Only one title you can use around 20-30 words. Nothing else.
         Embed the date naturally in the middle with a funny context.
         Adress the viewers in a cazual genz way!
-        Use the name "pollinations.ai" strictly.
+        Use the name "pollinations.ai" strictly (case sensitive).
+        Give a context of the full thing in a descriptive way.
         Create a FOMO effect and ask them to register at enter.pollinations.ai for easy AI features access.
         Describe the new merged features from the PR summary in a catchy way.
         `;
-        const userPrompt = `Generate a Reddit description for this dev update from ${dateString}:${prSummary}`;
+        const userPrompt = `Generate a Reddit description for this dev update from  the following pull requests ${dateString}:${prs}`;
 
         const response = await fetch(POLLINATIONS_API, {
             method: 'POST',
@@ -387,19 +405,19 @@ if (!pollinationsToken) {
 throw new Error('Pollinations token not configured. Please set it in app settings.');
 }
 
+
 (async () => {
-// const promptData = await getPRsAndCreatePrompt(githubToken as string, pollinationsToken as string);
+const promptData = await getPRsAndCreatePrompt(githubToken as string, pollinationsToken as string);
+console.log(promptData)
 // const imageData = await generateImage(promptData.prompt, pollinationsToken as string);
-const promptData = {
-    summary: 'Bright comic-style nature flowchart where each update is a distinct element: blooming flowers for improved model selection UI (dual names, better tooltip), Vertex AI migration, backfill priority/options, and dynamic pricing from real usage data; pruned branches for Polar sandbox token/dev setup and API docs schema cleanup; reorganized vine paths for switching to Mermaid diagrams; nesting animals for infrastructure/config cleanups and moving the profile README. Use emerald, golden, sky blue, orange, purple with dynamic wind swirls, drifting pollen, flowing water arrows, and bee flight paths connecting each node.',
-    prCount: 13,
-    highlights: [],
-    prs: [],
-    dateString: new Date().toISOString().split('T')[0],
-};
-const TITLE = await generateTitleFromPRs(promptData.summary, String(promptData.prCount), pollinationsToken as string, promptData.dateString || new Date().toISOString().split('T')[0]);
+// const promptData = {
+//     summary: 'Bright comic-style nature flowchart where each update is a distinct element: blooming flowers for improved model selection UI (dual names, better tooltip), Vertex AI migration, backfill priority/options, and dynamic pricing from real usage data; pruned branches for Polar sandbox token/dev setup and API docs schema cleanup; reorganized vine paths for switching to Mermaid diagrams; nesting animals for infrastructure/config cleanups and moving the profile README. Use emerald, golden, sky blue, orange, purple with dynamic wind swirls, drifting pollen, flowing water arrows, and bee flight paths connecting each node.',
+//     prCount: 13,
+//     highlights: [],
+//     prs: [],
+//     dateString: new Date().toISOString().split('T')[0],
+// };
 console.log('Final Results:');
-console.log(`Title: ${TITLE}`);
 // console.log(`Image URL: ${imageData.url}`);
 // const fs = await import('fs');
 // const linkTsPath = new URL('link.ts', import.meta.url);
