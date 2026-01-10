@@ -1,4 +1,4 @@
-import {LINK, TITLE} from './link.js';
+import {LINK, TITLE, SUBREDDIT} from './link.js';
 import { Devvit} from '@devvit/public-api';
 
 Devvit.configure({
@@ -18,7 +18,7 @@ Devvit.addTrigger({
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const post = await context.reddit.submitPost({
-        subredditName: 'pollinations_ai',
+        subredditName: SUBREDDIT,
         title: TITLE,
         kind: 'image',
         imageUrls: [imageAsset.mediaUrl],
