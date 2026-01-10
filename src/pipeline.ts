@@ -225,6 +225,7 @@ ${highlights.map(h => `• ${h}`).join('\n')}
             prCount: prs.length,
             highlights,
             prs: prs.map(p => ({ number: p.number, title: p.title, url: p.url })),
+            dateString,
         };
     } catch (error) {
         console.warn(`Prompt generation failed: ${(error as any).message}`);
@@ -253,6 +254,7 @@ Write in pure plain text, no metadata or extra commentary or markdown`;
             prCount: prs.length,
             highlights,
             prs: prs.map(p => ({ number: p.number, title: p.title, url: p.url })),
+            dateString,
         };
     }
 }
@@ -280,13 +282,23 @@ async function getPRsAndCreatePrompt(githubToken : string, pollactionsToken : st
 }
 
 
-async function generateTitleFromPRs(prSummary : string, prCount : string, pollactionsToken : string) {
+async function generateTitleFromPRs(prSummary : string, prCount : string, pollactionsToken : string, dateString: string = '') {
     try {
-        const systemPrompt = `You are a Reddit post title generator. Generate a catchy yet descriptive development update title, maximum 12 words. The title must be clear, engaging, and professional, with natural enthusiasm. Avoid brackets, numbers, metrics, emojis, hashtags, or promotional language. Prioritize concrete features or improvements over vague hype.`;
-        const userPrompt = `Generate a Reddit post title for this dev update:
+        const dateFormatted = dateString ? `[${dateString}]` : '';
+        const systemPrompt = `You are a Reddit post title generator for Pollinations, an open-source AI platform. Generate a compelling title (max 13 words) that:
+1. Creates FOMO by highlighting exclusive early access to new AI capabilities
+2. Mentions entering enter.pollinations.ai to register and try new features
+3. Emphasizes building projects and getting featured
+4. Includes the date in format provided
+5. Uses "Pollinations" branding naturally
+6. Is suitable for fundraising - exciting yet authentic
+Avoid emojis. Create urgency and opportunity-focused messaging.`;
+        const userPrompt = `Generate a Reddit title for this dev update from ${dateString}:
 ${prSummary}
 
-Title only, no explanation.`;
+The goal is to drive registrations to enter.pollinations.ai and create FOMO about new AI features and opportunities to get featured.
+
+Title only, no explanation or quotes.`;
 
         const response = await fetch(POLLINATIONS_API, {
             method: 'POST',
@@ -301,7 +313,7 @@ Title only, no explanation.`;
                     { role: 'user', content: userPrompt },
                 ],
                 temperature: 0.8,
-                max_tokens: 60,
+                max_tokens: 80,
             }),
         });
 
@@ -315,13 +327,14 @@ Title only, no explanation.`;
         title = title.replace(/^["']|["']$/g, '').trim();
         
         if (!title || title.length < 5) {
-            title = `Pollinations: ${prCount} Updates Shipped`;
+            title = `Pollinations: New AI Powers Unlock ${dateFormatted} - Register at enter.pollinations.ai for Early Access`;
         }
 
         return title;
     } catch (error) {
         console.error('PR title generation failed:', (error as any).message);
-        return `Pollinations: ${prCount} Updates Shipped`;
+        const dateFormatted = dateString ? `[${dateString}]` : '';
+        return `Pollinations: What's New in AI? ${dateFormatted} - Build, Share, Get Featured at enter.pollinations.ai`;
     }
 }
 
@@ -373,7 +386,7 @@ throw new Error('Pollinations token not configured. Please set it in app setting
 (async () => {
 const promptData = await getPRsAndCreatePrompt(githubToken as string, pollinationsToken as string);
 const imageData = await generateImage(promptData.prompt, pollinationsToken as string);
-const TITLE = await generateTitleFromPRs(promptData.summary, String(promptData.prCount), pollinationsToken as string);
+const TITLE = await generateTitleFromPRs(promptData.summary, String(promptData.prCount), pollinationsToken as string, promptData.dateString || new Date().toISOString().split('T')[0]);
 // const img_url = "https://gen.pollinations.ai/image/Bright%20nature-themed%20comic%20flowchart%20where%20each%20update%20is%20a%20distinct%20natural%20element%3A%20pruned%20branches%20for%20removing%20sops%20decrypt%20from%20the%20start%20script%3B%20blooming%20flowers%20for%20adding%20a%20Reddit%20link%2C%20updating%20the%20submit%20app%20template%2C%20adding%20AI%20Chat%20Studio%20to%20chat%2C%20improving%20the%20hello%20UI%2C%20and%20adjusting%20z-image%20(upscaling%20temporarily%20disabled%2C%20safety%20checker%20off%20by%20default).%20Reorganized%20winding%20paths%20and%20vine-lattices%20show%20refactors%20to%20standardize%20infrastructure%20keys%20and%20clean%20up%20secrets%2C%20while%20nesting%20animals%20depict%20workflow%20infrastructure%3A%20tier%20automation%20that%20gates%20app%20PRs%20on%20Enter%20account%20and%20auto-upgrades%20on%20approval.%20Use%20emerald%2C%20golden%2C%20sky%20blue%2C%20orange%2C%20and%20purple%20with%20dynamic%20wind%20swirls%2C%20floating%20pollen%2C%20flowing%20water%2C%20and%20bee%20flight%20paths%20connecting%20nodes%20in%20a%20lively%20comic%20style.?model=nanobanana&width=1024&height=1024&seed=742956"
 // const TITLE = "Nature-Themed Comic Flowchart Image"
 console.log('Final Results:');
