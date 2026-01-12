@@ -178,7 +178,7 @@ async function createImagePrompt(prs : any[], dateString: string, pollactionsTok
                 'Authorization': `Bearer ${pollactionsToken}`,
             },
             body: JSON.stringify({
-                model: 'openai-large',
+                model: 'gemini-fast',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
