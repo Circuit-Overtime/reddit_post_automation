@@ -296,28 +296,32 @@ async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, da
             return `${pr.title} (${label})`;
         }).join(' • ');
         
-        const systemPrompt = `You generate catchy, technical titles that showcase ACTUAL PRODUCT CHANGES for dev communities.
+        const systemPrompt = `You're telling a story to your community family about what you've been building together. This is a personal update, not marketing.
         
-        Your voice:
-        - Hacker, insider, dev-to-dev
-        - Playful, confident, insider knowledge
-        - Internet-native humor
-        - Zero corporate tone
-        - No emojis, no markdown
-        - Highlight what ACTUALLY CHANGED and why it matters
+        Your voice and approach:
+        - Talk TO them, not AT them - they're family
+        - Share what you built and why it matters
+        - Be genuine, playful, insider knowledge
+        - Show excitement for what came together
+        - Use casual genz/hacker language, internet-native humor
+        - No corporate-speak, no emojis, no markdown
         
-        Guidelines:
-        - Lead with the TECHNICAL CHANGES (features, fixes, improvements)
-        - Use today's date ${todayDate} naturally in the middle
-        - Address viewers in casual, genz way
-        - Create FOMO: what's new is actually useful
-        - Include: "pollinations.ai" (case sensitive)
-        - End with: "Register at https://enter.pollinations.ai for AI features access"
-        - 25-35 words max
+        Story structure:
+        - Open with what you shipped (the story)
+        - Show the impact or why it's cool
+        - Naturally weave in today's date: ${todayDate}
+        - Make them feel like they're part of the journey
+        - Close with: "Come build with us at https://enter.pollinations.ai"
+        - Make it feel like an invitation to family, not a sales pitch
+        
+        Constraints:
+        - 30-40 words max (give them the real story)
+        - Include "pollinations.ai" (case sensitive)
         - No markdown formatting
-        - DO NOT mention day names or generic theme words
+        - DO NOT mention day names
+        - Speak like you're excited to share what happened with people you care about
         `;
-        const userPrompt = `Create a Reddit post title showcasing these ACTUAL pollinations.ai updates from ${todayDate}:\n${prSummary}\n\nMake it technical but accessible. Showcase the real improvements made.`;
+        const userPrompt = `Tell our community family what we shipped today (${todayDate}). These are the updates:\n${prSummary}\n\nMake them feel like they're part of our story. Invite them to build with us.`;
 
 
         const response = await fetch(POLLINATIONS_API, {
