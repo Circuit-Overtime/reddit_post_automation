@@ -160,7 +160,7 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
     return { prs: allPRs, dateString };
 }
 
-async function createImagePrompt(prs : any[], dateString: string, pollactionsToken : string) {
+async function createImagePrompt(prs : any[], dateString: string, pollinationsToken : string) {
     if (!prs || prs.length === 0) {
         return {
             prompt: 'Pollinations: A free, open-source AI image generation platform with community updates',
@@ -183,7 +183,7 @@ async function createImagePrompt(prs : any[], dateString: string, pollactionsTok
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${pollactionsToken}`,
+                'Authorization': `Bearer ${pollinationsToken}`,
             },
             body: JSON.stringify({
                 model: 'gemini-fast',
@@ -278,7 +278,7 @@ Write in pure plain text, no metadata or extra commentary or markdown`;
     }
 }
 
-async function generateTitleFromPRs(prs : Array<string>,  pollactionsToken : string, dateString: string = '') {
+async function generateTitleFromPRs(prs : Array<string>,  pollinationsToken : string, dateString: string = '') {
     try {
         const todayDate = getTodayDate();
         const theme = getCurrentTheme();
@@ -315,7 +315,7 @@ async function generateTitleFromPRs(prs : Array<string>,  pollactionsToken : str
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${pollactionsToken}`,
+                'Authorization': `Bearer ${pollinationsToken}`,
             },
             body: JSON.stringify({
                 model: 'gemini-fast',
@@ -350,7 +350,7 @@ async function generateTitleFromPRs(prs : Array<string>,  pollactionsToken : str
     }
 }
 
-async function generateImage(prompt : string, pollactionsToken : string, attempt = 0) {
+async function generateImage(prompt : string, pollinationsToken : string, attempt = 0) {
     if (attempt > 0) {
         const delay = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1);
         console.log(`  Retrying in ${delay}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
@@ -362,7 +362,7 @@ async function generateImage(prompt : string, pollactionsToken : string, attempt
         const response = await fetch(URL, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${pollactionsToken}`,
+                'Authorization': `Bearer ${pollinationsToken}`,
             },
             signal: AbortSignal.timeout(120000),
         });
@@ -378,13 +378,13 @@ async function generateImage(prompt : string, pollactionsToken : string, attempt
     } catch (error) {
         if (attempt < MAX_RETRIES - 1) {
             console.log(`  ✗ Attempt ${attempt + 1} failed: ${(error as any).message}`);
-            return generateImage(prompt, pollactionsToken, attempt + 1);
+            return generateImage(prompt, pollinationsToken, attempt + 1);
         }
         throw error;
     }
 }
 
-async function pipeline(githubToken : string, pollactionsToken : string) {
+async function pipeline(githubToken : string, pollinationsToken : string) {
     try {
         const theme = getCurrentTheme();
         console.log('\n🎨 Daily Theme Configuration:');
@@ -399,19 +399,19 @@ async function pipeline(githubToken : string, pollactionsToken : string) {
         }
         
         const { prs, dateString } = result;
-        const promptData = await createImagePrompt(prs, dateString, pollactionsToken);
+        const promptData = await createImagePrompt(prs, dateString, pollinationsToken);
         console.log('\n=== Generated Image Prompt (Themed) ===');
         console.log(promptData.prompt);
         console.log('\n');
 
 
-        const postTitle = await generateTitleFromPRs(prs.map(p => p.title), pollactionsToken, dateString);
+        const postTitle = await generateTitleFromPRs(prs.map(p => p.title), pollinationsToken, dateString);
         console.log('=== Generated Post Title (Themed) ===');
         console.log(postTitle);
         console.log('\n');
         
         
-        const imageData = await generateImage(promptData.prompt, pollactionsToken);
+        const imageData = await generateImage(promptData.prompt, pollinationsToken);
         console.log('=== Generated Image URL ===');
         console.log(imageData.url);
         console.log('\n');
