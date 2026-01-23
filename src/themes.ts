@@ -235,14 +235,16 @@ export function buildThemedImagePrompt(prSummary: string, prObjects?: any[]): st
 - The bee mascot reinforces our Pollinations brand identity - keep it cute, warm, and inviting
 - Let the bee's gestures naturally guide the viewer's eye through the visual story of improvements`;
 
-        textOverlay = `\nTEXT OVERLAY - Add these change labels directly on the image:
+        textOverlay = `\nTEXT OVERLAY - Add these change labels directly on the image with STYLISH FONTS:
 - Blend text seamlessly into the composition (not bold banner, but integrated)
-- Use elegant, flowing typography that matches the nature aesthetic
+- Use elegant, flowing, HIGH-QUALITY typography that matches the nature aesthetic
+- Font style options: mix of thin serif + bold sans-serif, or modern geometric fonts
 - Place text labels near their corresponding visual elements AND near where the bee is pointing
 - Use semi-transparent or blended text so it feels part of the artwork
 - Key changes to display: ${textItems.slice(0, 3).join(' • ')}
 - Make text glow subtly with colors from the palette: ${colorsStr}
-- The text should tell the story: what we built, fixed, and improved`;
+- FONT STRATEGY: Make certain keywords POP with different font weights/styles (bold for features, italics for optimizations, elegant serif for improvements)
+- The text should tell the story with style: what we built, fixed, and improved`;
     }
 
     return `${theme.promptPrefix}

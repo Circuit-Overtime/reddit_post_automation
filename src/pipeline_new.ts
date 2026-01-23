@@ -181,9 +181,15 @@ async function createImagePrompt(prs : any[], dateString: string, pollinationsTo
     Visual elements to use: ${theme.visualElements.slice(0, 3).join(', ')}
     Color palette: ${theme.colorPalette.join(', ')}
     
+    TYPOGRAPHY IS KEY - The text overlays must use STYLISH, HIGH-QUALITY fonts:
+    - Mix modern sans-serif with elegant serif for visual hierarchy
+    - Make key words stand out with varying font weights and styles
+    - Consider beautiful geometric or tech-forward font choices
+    - Text should look premium and carefully designed
+    
     IMPORTANT: Include the Pollinations bee mascot as a key element - the bee should be pointing at and teaching viewers about the different improvements and changes. The bee is our brand mascot and should appear as a friendly, knowledgeable guide in the composition.
     
-    Your prompt must visually communicate what these changes DO, not be generic. Show growth, improvement, technical advancement - all guided and highlighted by the bee mascot.
+    Your prompt must visually communicate what these changes DO, not be generic. Show growth, improvement, technical advancement - all guided and highlighted by the bee mascot with stylish text that enhances the design.
     Output ONLY the image prompt, no markdown, no extra text.`;
     const userPrompt = buildThemedImagePrompt(prDetails, prs.slice(0, 10));
 
@@ -298,32 +304,32 @@ async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, da
             return `${pr.title} (${label})`;
         }).join(' • ');
         
-        const systemPrompt = `You're telling a story to your community family about what you've been building together. This is a personal update, not marketing.
-        
+        const systemPrompt = `You're creating a SHORT, CATCHY post title that makes people STOP SCROLLING and want to see the image.
+
         Your voice and approach:
-        - Talk TO them, not AT them - they're family
-        - Share what you built and why it matters
-        - Be genuine, playful, insider knowledge
-        - Show excitement for what came together
-        - Use casual genz/hacker language, internet-native humor
-        - No corporate-speak, no emojis, no markdown
+        - Make them curious - don't give away everything in the title
+        - Use intrigue, suspense, or playful language
+        - Speak like you're excited but mysterious about what you built
+        - Sound insider-ish, like a secret worth discovering
+        - Make them wonder "what did they just ship?"
+        - Be genuine and authentic, not clickbait-y
         
-        Story structure:
-        - Open with what you shipped (the story)
-        - Show the impact or why it's cool
-        - Naturally weave in today's date: ${todayDate}
-        - Make them feel like they're part of the journey
-        - Close with: "Come build with us at https://enter.pollinations.ai"
-        - Make it feel like an invitation to family, not a sales pitch
+        Title formula that works:
+        - TEASER + REVEAL structure (hint at something cool, don't spoil it)
+        - OR: Raise a question that the image answers
+        - OR: Drop hints about what changed/improved
+        - Examples of what we want: "something remarkable happened", "we did the thing", "you're gonna want to see this"
         
         Constraints:
-        - 30-40 words max (give them the real story)
-        - Include "pollinations.ai" (case sensitive)
-        - No markdown formatting
-        - DO NOT mention day names
-        - Speak like you're excited to share what happened with people you care about
+        - 5-12 words MAX (short and punchy!)
+        - Must include "pollinations.ai" OR "Pollinations"
+        - NO markdown, NO emojis
+        - NO day names
+        - NO marketing-speak or corporate language
+        - Make them WAIT to see the image to understand
+        - Should feel like an insider sharing something cool with friends
         `;
-        const userPrompt = `Tell our community family what we shipped today (${todayDate}). These are the updates:\n${prSummary}\n\nMake them feel like they're part of our story. Invite them to build with us.`;
+        const userPrompt = `Create a short, mysterious, attention-grabbing title for today's post (${todayDate}). We shipped these updates:\n${prSummary}\n\nMake people curious enough to click and see the image without explaining everything.`;
 
 
         const response = await fetch(POLLINATIONS_API, {
@@ -354,14 +360,13 @@ async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, da
         title = title.replace(/^["']|["']$/g, '').trim();
         
         if (!title || title.length < 5) {
-            title = `Pollinations: New AI Powers Unlock ${todayDate} - Register at https://enter.pollinations.ai for Early Access`;
+            title = `Something remarkable happened at Pollinations today`;
         }
 
         return title;
     } catch (error) {
         console.error('PR title generation failed:', (error as any).message);
-        const todayDate = getTodayDate();
-        return `Pollinations: What's New in AI? ${todayDate} - Build, Share, Get Featured at https://enter.pollinations.ai`;
+        return `You're gonna want to see what Pollinations shipped`;
     }
 }
 
