@@ -8,7 +8,7 @@ const POLLINATIONS_API = 'https://gen.pollinations.ai/v1/chat/completions';
 const MAX_RETRIES = 2;
 const INITIAL_RETRY_DELAY = 5;
 const githubToken = process.env.GITHUB_TOKEN
-const pollinationsToken = process.env.POLLINATIONS_TOKEN
+const pollinationsToken = process.env.PLN_REDDIT_NEWS_KEY
 
 if (!githubToken) {
 throw new Error('GitHub token not configured. Please set it in app settings.');
