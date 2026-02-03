@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PROMPTS_DIR = join(__dirname, '../../prompts/reddit');
-const SHARED_DIR = join(__dirname, '../../prompts/_shared');
+const PROMPTS_DIR = join(__dirname, '../prompts/reddit');
+const SHARED_DIR = join(__dirname, '../prompts/_shared');
 
 function loadShared(name: string): string {
     const filePath = join(SHARED_DIR, `${name}.md`);
