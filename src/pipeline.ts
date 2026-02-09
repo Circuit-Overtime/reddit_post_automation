@@ -51,7 +51,7 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
           states: MERGED
           first: 100
           after: $cursor
-          orderBy: {field: UPDATED_AT, direction: DESC}
+          orderBy: {field: MERGED_AT, direction: DESC}
           baseRefName: "main"
         ) {
           pageInfo {
@@ -89,6 +89,7 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
 
     console.log(`\n=== Fetching PRs from ${dateString} ===`);
     console.log(`Time range: ${startDate.toISOString()} to ${endDate.toISOString()}`);
+    console.log(`Looking for PRs merged between these dates...\n`);
 
     let pageNum = 1;
 
@@ -124,8 +125,10 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
 
             for (const pr of nodes) {
                 const mergedDate = new Date(pr.mergedAt);
+                console.log(`  [${pageNum}] PR #${pr.number} - Merged: ${pr.mergedAt}`);
 
                 if (mergedDate >= startDate && mergedDate < endDate) {
+                    console.log(`    ✓ IN RANGE - Adding to results`);
                     allPRs.push({
                         number: pr.number,
                         title: pr.title,
@@ -136,9 +139,11 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
                         mergedAt: pr.mergedAt,
                     });
                 } else if (mergedDate < startDate) {
-                    console.log(`  Stopping: reached PRs before ${dateString}`);
+                    console.log(`    ✗ OUT OF RANGE (before start) - stopping search`);
                     pageNum = 999;
                     break;
+                } else {
+                    console.log(`    ~ OUT OF RANGE (after end)`);
                 }
             }
 
@@ -146,9 +151,6 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
 
             cursor = pageInfo.endCursor;
             pageNum++;
-            if (allPRs.length == 0) {
-                return
-            }
         } catch (error) {
             console.error('Fetch error:', error);
             break;
