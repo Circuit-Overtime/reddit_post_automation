@@ -163,7 +163,7 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
 async function createImagePrompt(prs : any[], dateString: string, pollinationsToken : string) {
     if (!prs || prs.length === 0) {
         return {
-            prompt: 'Flat vector editorial infographic: Pollinations: A free, open-source AI image generation platform with community updates',
+            prompt: 'Cozy 8-bit pixel art infographic: Pollinations weekly update. Soft lime green (#ecf874) background with pastel gradients. Bee mascot celebratingly looking at pixelated interface. Warm lighting, retro gaming vibes.',
             summary: 'No specific updates from previous day',
             prCount: 0,
             highlights: [],
@@ -173,7 +173,7 @@ async function createImagePrompt(prs : any[], dateString: string, pollinationsTo
     const prSummary = prs.slice(0, 10).map(pr => `- ${pr.title}`).join('\n');
     const systemPrompt = getSystemPromptTemplate(prSummary);
     
-    const userPrompt = `Generate an image prompt for a flat vector editorial infographic for Reddit based on these PRs:\n${prSummary}`;
+    const userPrompt = `Generate a COZY 8-BIT PIXEL ART image prompt for Reddit based on these PRs. Requirements:\n- Cozy pixel art aesthetic (like Stardew Valley)\n- Lime green (#ecf874) prominently featured\n- Pollinations bee mascot interacting with scene\n- Soft pastel gradients, warm lighting\n- Retro game UI elements\n- Readable at mobile size\nPRs:\n${prSummary}`;
 
     try {
         console.log('Generating merged prompt using Pollinations API...');
@@ -185,7 +185,7 @@ async function createImagePrompt(prs : any[], dateString: string, pollinationsTo
                 'Authorization': `Bearer ${pollinationsToken}`,
             },
             body: JSON.stringify({
-                model: 'openai-large',
+                model: 'gemini-fast',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
@@ -245,7 +245,7 @@ ${highlights.map(h => `• ${h}`).join('\n')}
         console.warn(`Prompt generation failed: ${(error as any).message}`);
         console.log('Falling back to local prompt generation...\n');
 
-        const comicPrompt = `Flat vector editorial infographic celebrating ${prs.length} Pollinations updates. Headline: 'POLLINATIONS - WEEKLY UPDATES'. Content includes: ${prs.slice(0, 5).map(p => p.title).join(', ')}. Style: minimal tech infographic. Color palette: cream background, navy text, lime green (#ecf874) accents. No decorative elements.`;
+        const comicPrompt = `Cozy 8-bit pixel art infographic celebrating ${prs.length} Pollinations updates. Headline in chunky pixel font: 'POLLINATIONS - WEEKLY UPDATES'. Soft lime green (#ecf874) and pastel gradient background. Bee mascot celebrating. Retro game UI panels showing: ${prs.slice(0, 4).map(p => p.title).join(', ')}. Warm lighting, Stardew Valley vibes, mobile-readable. Nature elements like pixel flowers and vines.`;
 
         const highlights = prs
             .slice(0, 8)
@@ -277,7 +277,7 @@ async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, da
         const prSummary = prs.slice(0, 5).map(pr => `- ${pr.title}`).join('\n');
         
         const systemPrompt = getSystemPromptTemplate(prSummary);
-        const userPrompt = `Create a short, factual Reddit post title (5-12 words) for today's update (${todayDate}) based on these PRs:\n${prSummary}\n\nTitle must include 'Pollinations' or 'Pollinations.ai' and follow Reddit norms - factual, non-promotional.`;
+        const userPrompt = `You are a senior tech communications strategist. Create a short, factual Reddit post title (5-12 words) for today's update (${todayDate}) based on these PRs:\n${prSummary}\n\nTitle must include 'Pollinations' or 'Pollinations.ai' and follow Reddit norms - informative, honest, non-marketing. Think like an open-source maintainer explaining what shipped.`;
 
         const response = await fetch(POLLINATIONS_API, {
             method: 'POST',
