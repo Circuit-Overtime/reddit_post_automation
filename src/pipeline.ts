@@ -160,6 +160,55 @@ async function getMergedPRsFromPreviousDay(owner : any = 'pollinations', repo : 
     return { prs: allPRs, dateString };
 }
 
+async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, dateString: string = '') {
+    try {
+        const todayDate = getTodayDate();
+        
+        const prSummary = prs.slice(0, 5).map(pr => `- ${pr.title}`).join('\n');
+        
+        const systemPrompt = getSystemPromptTemplate(prSummary);
+        const userPrompt = `You are a senior tech communications strategist. Create a short, factual Reddit post title (5-12 words) for today's update (${todayDate}) based on these PRs:\n${prSummary}\n\nTitle must include 'Pollinations' or 'Pollinations.ai' and follow Reddit norms - informative, honest, non-marketing. Think like an open-source maintainer explaining what shipped.`;
+
+        const response = await fetch(POLLINATIONS_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${pollinationsToken}`,
+            },
+            body: JSON.stringify({
+                model: 'openai-large',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt },
+                ],
+                temperature: 0.7,
+                max_tokens: 150,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        let title = (data as any).choices?.[0]?.message?.content?.trim() || '';
+        
+        title = title.replace(/^["']|["']$/g, '').trim();
+        
+        if (!title || title.length < 5) {
+            title = `Something remarkable happened at Pollinations today`;
+        }
+
+        return title;
+    } catch (error) {
+        console.error('PR title generation failed:', (error as any).message);
+        return `You're gonna want to see what Pollinations shipped`;
+    }
+}
+
+
+
+
 async function createImagePrompt(prs : any[], dateString: string, pollinationsToken : string) {
     if (!prs || prs.length === 0) {
         return {
@@ -270,52 +319,6 @@ ${highlights.map(h => `• ${h}`).join('\n')}
     }
 }
 
-async function generateTitleFromPRs(prs : any[],  pollinationsToken : string, dateString: string = '') {
-    try {
-        const todayDate = getTodayDate();
-        
-        const prSummary = prs.slice(0, 5).map(pr => `- ${pr.title}`).join('\n');
-        
-        const systemPrompt = getSystemPromptTemplate(prSummary);
-        const userPrompt = `You are a senior tech communications strategist. Create a short, factual Reddit post title (5-12 words) for today's update (${todayDate}) based on these PRs:\n${prSummary}\n\nTitle must include 'Pollinations' or 'Pollinations.ai' and follow Reddit norms - informative, honest, non-marketing. Think like an open-source maintainer explaining what shipped.`;
-
-        const response = await fetch(POLLINATIONS_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${pollinationsToken}`,
-            },
-            body: JSON.stringify({
-                model: 'openai-large',
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userPrompt },
-                ],
-                temperature: 0.7,
-                max_tokens: 150,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        let title = (data as any).choices?.[0]?.message?.content?.trim() || '';
-        
-        title = title.replace(/^["']|["']$/g, '').trim();
-        
-        if (!title || title.length < 5) {
-            title = `Something remarkable happened at Pollinations today`;
-        }
-
-        return title;
-    } catch (error) {
-        console.error('PR title generation failed:', (error as any).message);
-        return `You're gonna want to see what Pollinations shipped`;
-    }
-}
-
 async function generateImage(prompt : string, pollinationsToken : string, attempt = 0) {
     if (attempt > 0) {
         const delay = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1);
@@ -394,7 +397,7 @@ async function pipeline(githubToken : string, pollinationsToken : string, trigge
 
 
 (async () => {
-const triggerTime = new Date(); // Capture trigger time at execution start
+const triggerTime = new Date(); 
 const promptData = await pipeline(githubToken as string, pollinationsToken as string, triggerTime);
 
 if (!promptData) {
