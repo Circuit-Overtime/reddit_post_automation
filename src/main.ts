@@ -21,6 +21,8 @@ try {
   console.warn('postConfig.json not found, will use environment variables if available');
 }
 
+
+
 Devvit.addTrigger({
   event: 'AppUpgrade',
   onEvent: async (event, context) => {
@@ -61,6 +63,7 @@ Devvit.addTrigger({
 });
 
 export default Devvit;
+
 
 
 
