@@ -18,6 +18,8 @@ cleanup() {
   echo ""
   echo "🧹 Cleaning up processes..."
   
+  rm -f src/postConfig.json
+  
   echo "📤 Committing and pushing changes to GitHub..."
   git add .
   git commit -m "Deploy post to Reddit with image and title" 2>/dev/null || true
