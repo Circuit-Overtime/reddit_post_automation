@@ -10,32 +10,26 @@ def deploy_reddit_post(
     reddit_data: Dict,
     vps_host: str,
     vps_user: str,
-    vps_ssh_key: str,
+    pkey: paramiko.PKey,
 ) -> bool:
 
     title = reddit_data.get("title", "")
     image_url = reddit_data.get("image", {}).get("url", "")
 
-    if not all([title, image_url, vps_host, vps_user, vps_ssh_key]):
+    if not all([title, image_url, vps_host, vps_user, pkey]):
         print("  VPS: Missing required arguments")
         return False
 
     try:
-        import tempfile
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.pem') as f:
-            f.write(vps_ssh_key)
-            ssh_key_path = f.name
-        
-        os.chmod(ssh_key_path, 0o600)
-
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         print(f"  VPS: Connecting to {vps_user}@{vps_host}...")
+
         ssh.connect(
             hostname=vps_host,
             username=vps_user,
-            key_filename=ssh_key_path,
+            pkey=pkey,
             timeout=30,
             allow_agent=False,
             look_for_keys=False,
@@ -45,23 +39,16 @@ def deploy_reddit_post(
         url_escaped = image_url.replace("'", "'\\''")
 
         cmd = f"nohup /root/reddit_post_automation/bash/deploy.sh '{url_escaped}' '{title_escaped}' > /tmp/deploy.log 2>&1 &"
-        print(f"  VPS: Triggering deployment script in background...")
 
         ssh.exec_command(cmd)
         ssh.close()
-        os.unlink(ssh_key_path)
 
-        print(f"  VPS: Deployment script triggered successfully")
+        print("  VPS: Deployment script triggered successfully")
         return True
 
     except Exception as e:
         print(f"  VPS: {type(e).__name__}: {e}")
-        try:
-            os.unlink(ssh_key_path)
-        except:
-            pass
         return False
-
 
 
 b64 = os.getenv("VPS_SSH_KEY_B64", "").strip()
