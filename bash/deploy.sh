@@ -62,19 +62,19 @@ pkill -f "devvit playtest" 2>/dev/null || true
 pkill -f "node.*devvit" 2>/dev/null || true
 sleep 2
 
-echo "📤 Step 1: Starting playtest mode..."
+echo "📤 Step 2: Starting playtest mode..."
 $NPX devvit playtest "$SUBREDDIT" &
 PLAYTEST_PID=$!
 sleep 3
 
-echo "📝 Step 2: Triggering update (modify main.ts)..."
-echo "" >> /root/reddit_post_automation/src/main.ts
+echo "📝 Step 3: Triggering update (modify main.ts)..."
+echo "" >> src/main.ts
 
-echo "📊 Step 3: Posting image to Reddit..."
+echo "📊 Step 4: Watching for successful image post..."
 echo ""
 
 echo "⏱️  Keeping process alive for 2 minutes..."
-sleep 120
+sleep 30
 
 echo ""
 echo "✅ 2 minutes elapsed. Shutting down..."

@@ -10,6 +10,7 @@ let LINK = '';
 let TITLE = '';
 
 try {
+  console.log("Running the devvit app!")
   const configPath = '/root/reddit_post_automation/src/postConfig.json';
   if (fs.existsSync(configPath)) {
     const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
