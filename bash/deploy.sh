@@ -1,38 +1,39 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <image_link> <title>"
-  echo "Example: $0 'https://example.com/image.jpg' 'My Post Title'"
-  exit 1
-fi
-
-IMAGE_LINK="$1"
-TITLE="$2"
-
-cd /root/reddit_post_automation || exit 1
-
+# Use the same npx and node from the user's environment
 NPX="/usr/bin/npx"
 NODE="/usr/bin/node"
+TSX="$NODE $($NPX which tsx)"
 
 cleanup() {
   local exit_code=$?
   echo ""
   echo "🧹 Cleaning up processes..."
-  rm -f /root/reddit_post_automation/src/postConfig.json
-  
-  if [ ! -z "$PLAYTEST_PID" ] && kill -0 $PLAYTEST_PID 2>/dev/null; then
-    kill -9 $PLAYTEST_PID 2>/dev/null
-    wait $PLAYTEST_PID 2>/dev/null
-  fi
-  
-  pkill -9 -f "devvit playtest" 2>/dev/null || true
-  lsof -ti:5678 2>/dev/null | xargs kill -9 2>/dev/null || true
-  sleep 1
   
   echo "📤 Committing and pushing changes to GitHub..."
-  git add . 2>/dev/null || true
-  git commit -m "Deploy post to Reddit with image and title" 2>/dev/null || true
+  git add .
+  git commit -m "Deploy updated link.ts and main.ts" 2>/dev/null || true
   git push origin main 2>/dev/null || true
+  
+  if [ ! -z "$PLAYTEST_PID" ] && kill -0 $PLAYTEST_PID 2>/dev/null; then
+    kill -TERM $PLAYTEST_PID 2>/dev/null
+    sleep 1
+    kill -KILL $PLAYTEST_PID 2>/dev/null
+  fi
+  
+  pkill -f "devvit playtest" 2>/dev/null || true
+  pkill -f "node.*devvit" 2>/dev/null || true
+  pkill -f "^node$" 2>/dev/null || true
+  
+  lsof -ti:5678 2>/dev/null | xargs kill -9 2>/dev/null || true
+  
+  zombies=$(ps aux | grep -c " <defunct>")
+  if [ $zombies -gt 1 ]; then
+    echo "⚠️  Found zombie processes, cleaning up..."
+    ps aux | grep " <defunct>" | awk '{print $2}' | xargs -r kill -9 2>/dev/null || true
+  fi
+  
+  sleep 1
   
   echo "✓ Cleanup complete"
   exit $exit_code
@@ -41,54 +42,45 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 SUBREDDIT="pollinations_ai"
+timeout=120
+elapsed=0
+interval=2
 
-echo "🚀 Starting direct deployment to Reddit..."
-echo "📤 Image Link: $IMAGE_LINK"
-echo "📝 Title: $TITLE"
-
-echo ""
-echo "📦 Updating Devvit CLI..."
-npm install -g devvit@latest 2>&1 | tail -n 3
-
-echo ""
-echo "🔐 Verifying Devvit authentication..."
-$NPX devvit whoami
-if [ $? -ne 0 ]; then
-  echo "❌ Devvit authentication check failed"
+echo "🚀 Starting Pollinations deployment pipeline..."
+echo "📝 Step 1: Generating image prompt and updating link.ts..."
+$NPX tsx src/pipeline.ts 2>&1
+PIPELINE_EXIT_CODE=$?
+if [ $PIPELINE_EXIT_CODE -eq 0 ]; then
+  echo "✓ Pipeline completed successfully"
+  if ! [ -f src/link.ts ] || [ -z "$(grep -o 'const LINK' src/link.ts)" ]; then
+    echo "ℹ️  No merged PRs found. Exiting without posting."
+    exit 0
+  fi
+else
+  echo "❌ Pipeline failed"
   exit 1
 fi
 
-echo ""
-
-cat > /root/reddit_post_automation/src/postConfig.json << EOF
-{
-  "imageLink": "$IMAGE_LINK",
-  "title": "$TITLE"
-}
-EOF
+echo "✓ Pipeline completed, waiting 5 seconds for link.ts to update..."
+sleep 5
 
 pkill -f "devvit playtest" 2>/dev/null || true
 pkill -f "node.*devvit" 2>/dev/null || true
-sleep 5
+sleep 2
 
 echo "📤 Step 2: Starting playtest mode..."
 $NPX devvit playtest "$SUBREDDIT" &
 PLAYTEST_PID=$!
-
-echo "⏳ Waiting for playtest to fully initialize..."
-sleep 15
-
-echo "⏳ Waiting additional 5 seconds before triggering update..."
-sleep 5
+sleep 3
 
 echo "📝 Step 3: Triggering update (modify main.ts)..."
-echo "" >> /root/reddit_post_automation/src/main.ts
+echo "" >> src/main.ts
 
 echo "📊 Step 4: Watching for successful image post..."
 echo ""
 
 echo "⏱️  Keeping process alive for 2 minutes..."
-sleep 30
+sleep 120
 
 echo ""
 echo "✅ 2 minutes elapsed. Shutting down..."

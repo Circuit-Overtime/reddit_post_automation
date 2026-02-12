@@ -38,7 +38,7 @@ def deploy_reddit_post(
         title_escaped = title.replace("'", "'\\''")
         url_escaped = image_url.replace("'", "'\\''")
 
-        cmd = f"nohup /root/reddit_post_automation/bash/deploy.sh '{url_escaped}' '{title_escaped}' > /tmp/deploy.log 2>&1 &"
+        cmd = f"nohup /root/reddit_post_automation/bash/upload.sh '{url_escaped}' '{title_escaped}' > /tmp/deploy.log 2>&1 &"
 
         ssh.exec_command(cmd)
         ssh.close()
