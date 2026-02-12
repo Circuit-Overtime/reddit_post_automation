@@ -13,13 +13,11 @@ cd /root/reddit_post_automation || exit 1
 
 NPX="/usr/bin/npx"
 NODE="/usr/bin/node"
-TSX="$NODE $($NPX which tsx)"
 
 cleanup() {
   local exit_code=$?
   echo ""
   echo "🧹 Cleaning up processes..."
-  
   rm -f /root/reddit_post_automation/src/postConfig.json
   
   if [ ! -z "$PLAYTEST_PID" ] && kill -0 $PLAYTEST_PID 2>/dev/null; then
@@ -28,10 +26,7 @@ cleanup() {
   fi
   
   pkill -9 -f "devvit playtest" 2>/dev/null || true
-  pkill -9 -f "tsx" 2>/dev/null || true
-  
   lsof -ti:5678 2>/dev/null | xargs kill -9 2>/dev/null || true
-  
   sleep 1
   
   echo "📤 Committing and pushing changes to GitHub..."
@@ -51,6 +46,20 @@ echo "🚀 Starting direct deployment to Reddit..."
 echo "📤 Image Link: $IMAGE_LINK"
 echo "📝 Title: $TITLE"
 
+echo ""
+echo "📦 Updating Devvit CLI..."
+npm install -g devvit@latest 2>&1 | tail -n 3
+
+echo ""
+echo "🔐 Verifying Devvit authentication..."
+$NPX devvit whoami
+if [ $? -ne 0 ]; then
+  echo "❌ Devvit authentication check failed"
+  exit 1
+fi
+
+echo ""
+
 cat > /root/reddit_post_automation/src/postConfig.json << EOF
 {
   "imageLink": "$IMAGE_LINK",
@@ -60,7 +69,7 @@ EOF
 
 pkill -f "devvit playtest" 2>/dev/null || true
 pkill -f "node.*devvit" 2>/dev/null || true
-sleep 2
+sleep 5
 
 echo "📤 Step 2: Starting playtest mode..."
 $NPX devvit playtest "$SUBREDDIT" &
@@ -68,7 +77,7 @@ PLAYTEST_PID=$!
 sleep 3
 
 echo "📝 Step 3: Triggering update (modify main.ts)..."
-echo "" >> src/main.ts
+echo "" >> /root/reddit_post_automation/src/main.ts
 
 echo "📊 Step 4: Watching for successful image post..."
 echo ""
