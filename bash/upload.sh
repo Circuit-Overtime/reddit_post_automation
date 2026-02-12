@@ -59,13 +59,20 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "📤 Updating the devvit app on reddit using npx devvit update"
-$NPX devvit update 2>&1 | tail -n 5
-if [ $? -ne 0 ]; then
+echo "📤 Updating the devvit app on reddit..."
+$NPX devvit update
+UPDATE_EXIT_CODE=$?
+
+if [ $UPDATE_EXIT_CODE -ne 0 ]; then
   echo "❌ Devvit update failed"
   exit 1
 fi
 
+echo "✓ Devvit app updated successfully"
+echo ""
+
+echo "⏳ Waiting 3 seconds before proceeding..."
+sleep 3
 echo ""
 
 cat > /root/reddit_post_automation/src/postConfig.json << EOF
