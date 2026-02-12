@@ -2,16 +2,67 @@
 ✓ link.ts is already configured
 ✓ Waiting 5 seconds for file sync...
 📤 Step 2: Starting playtest mode...
- ›   Error: No project devvit.yaml config file found.
 📝 Step 3: Triggering update (modify main.ts)...
-/root/reddit_post_automation/bash/deploy.sh: line 61: src/main.ts: No such file or directory
 📊 Step 4: Watching for successful image post...
 
-⏱️  Keeping process alive for 2 minutes...
+⏱️  Keeping process alive for 30s ...
+Updating...
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
+[G[1A[JUpdating... ⣯
+[G[1A[JUpdating... ⣷
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
+[G[1A[JUpdating... ⣯
+[G[1A[JUpdating... ⣷
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
+[G[1A[JUpdating... ⣯
+[G[1A[JUpdating... ⣷
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
+[G[1A[JUpdating... ⣯
+[G[1A[JUpdating... ⣷
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
+[G[1A[JUpdating... ⣯
+[G[1A[JUpdating... ⣷
+[G[1A[JUpdating... ⣾
+[G[1A[JUpdating... ⣽
+[G[1A[JUpdating... ⣻
+[G[1A[JUpdating... ⢿
+[G[1A[JUpdating... ⡿
+[G[1A[JUpdating... Success!
+┌────────────────────────────────────────────────────────────────────┐
+│ ✓ Playtest ready                                                   │
+│ ➜ URL: https://www.reddit.com/r/pollinations_ai/?playtest=polli-ai │
+│ ➜ Version: v0.0.76.1                                               │
+│ ➜ Open the URL above and refresh to see your latest changes.       │
+└────────────────────────────────────────────────────────────────────┘
+🚀 Starting to post image to Reddit...
+✅ Image uploaded to Devvit Media Service: https://i.redd.it/7qhqwicwg2jg1.jpeg
 
-✅ 2 minutes elapsed. Shutting down...
+✅ 30 seconds elapsed. Shutting down...
 
 🧹 Cleaning up processes...
 📤 Committing and pushing changes to GitHub...
-fatal: not a git repository (or any of the parent directories): .git
-✓ Cleanup complete
