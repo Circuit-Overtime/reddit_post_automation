@@ -35,15 +35,26 @@ def deploy_reddit_post(
             look_for_keys=False,
         )
 
-        title_escaped = title.replace("'", "'\\''")
-        url_escaped = image_url.replace("'", "'\\''")
+        # Update link.ts with new URL and TITLE
+        update_link_cmd = f"""cat > /root/reddit_post_automation/src/link.ts << 'LINKEOF'
+const LINK = "{image_url}";
+const TITLE = "{title}";
+export {{LINK, TITLE}};
+LINKEOF
+"""
 
-        cmd = f"nohup /root/reddit_post_automation/bash/upload.sh '{url_escaped}' '{title_escaped}' > /tmp/deploy.log 2>&1 &"
+        print("  VPS: Updating link.ts...")
+        ssh.exec_command(update_link_cmd)
 
-        ssh.exec_command(cmd)
+        # Run deploy.sh, log to deploy.log
+        deploy_cmd = f"nohup bash /root/reddit_post_automation/bash/deploy.sh > /root/reddit_post_automation/deploy.log 2>&1 &"
+
+        print("  VPS: Running deploy.sh...")
+        ssh.exec_command(deploy_cmd)
         ssh.close()
 
         print("  VPS: Deployment script triggered successfully")
+        print("  VPS: Logs will be available at /root/reddit_post_automation/deploy.log")
         return True
 
     except Exception as e:

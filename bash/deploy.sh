@@ -42,11 +42,10 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 SUBREDDIT="pollinations_ai"
-timeout=120
-elapsed=0
-interval=2
 
-echo "✓ Pipeline completed, waiting 5 seconds for link.ts to update..."
+echo "🚀 Starting Pollinations deployment pipeline..."
+echo "✓ link.ts is already configured"
+echo "✓ Waiting 5 seconds for file sync..."
 sleep 5
 
 pkill -f "devvit playtest" 2>/dev/null || true
@@ -58,8 +57,8 @@ $NPX devvit playtest "$SUBREDDIT" &
 PLAYTEST_PID=$!
 sleep 3
 
-echo "📝 Step 3: Triggering update (modify og_main.ts)..."
-echo "" >> src/og_main.ts
+echo "📝 Step 3: Triggering update (modify main.ts)..."
+echo "" >> src/main.ts
 
 echo "📊 Step 4: Watching for successful image post..."
 echo ""

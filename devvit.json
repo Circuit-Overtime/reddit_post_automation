@@ -5,7 +5,7 @@
     "reddit": true
   },
   "blocks": {
-    "entry": "src/og_main.ts",
+    "entry": "src/main.ts",
     "triggers" : ["onAppUpgrade"]
   },
   "dev": {
