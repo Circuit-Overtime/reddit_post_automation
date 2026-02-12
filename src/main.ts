@@ -10,8 +10,9 @@ let LINK = '';
 let TITLE = '';
 
 try {
-  if (fs.existsSync('src/postConfig.json')) {
-    const config = JSON.parse(fs.readFileSync('src/postConfig.json', 'utf-8'));
+  const configPath = '/root/reddit_post_automation/src/postConfig.json';
+  if (fs.existsSync(configPath)) {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     LINK = config.imageLink || '';
     TITLE = config.title || '';
   }

@@ -9,6 +9,8 @@ fi
 IMAGE_LINK="$1"
 TITLE="$2"
 
+cd /root/reddit_post_automation || exit 1
+
 NPX="/usr/bin/npx"
 NODE="/usr/bin/node"
 TSX="$NODE $($NPX which tsx)"
@@ -18,7 +20,7 @@ cleanup() {
   echo ""
   echo "🧹 Cleaning up processes..."
   
-  rm -f src/postConfig.json
+  rm -f /root/reddit_post_automation/src/postConfig.json
   
   if [ ! -z "$PLAYTEST_PID" ] && kill -0 $PLAYTEST_PID 2>/dev/null; then
     kill -9 $PLAYTEST_PID 2>/dev/null
@@ -49,7 +51,7 @@ echo "🚀 Starting direct deployment to Reddit..."
 echo "📤 Image Link: $IMAGE_LINK"
 echo "📝 Title: $TITLE"
 
-cat > src/postConfig.json << EOF
+cat > /root/reddit_post_automation/src/postConfig.json << EOF
 {
   "imageLink": "$IMAGE_LINK",
   "title": "$TITLE"
@@ -66,7 +68,7 @@ PLAYTEST_PID=$!
 sleep 3
 
 echo "📝 Step 2: Triggering update (modify main.ts)..."
-echo "" >> src/main.ts
+echo "" >> /root/reddit_post_automation/src/main.ts
 
 echo "📊 Step 3: Posting image to Reddit..."
 echo ""
