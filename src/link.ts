@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-03-03/images/reddit.jpg";
-const TITLE = "Added Suno v5, Flux 2 Dev, Step 3.5 Flash, and automated abuse detection";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-03-04/images/reddit.jpg";
+const TITLE = "Added image-to-image for flux-2-dev, Suno routing fixes, and publishable keys";
 export {LINK, TITLE};
