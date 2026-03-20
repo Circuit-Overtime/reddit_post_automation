@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-03-18/images/reddit.jpg";
-const TITLE = "16 PRs merged: ESP32-S3 support, auth sync fixes, and new bots";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-03-19/images/reddit.jpg";
+const TITLE = "Updated the OpenClaw setup script for v2026.3 compatibility";
 export {LINK, TITLE};
