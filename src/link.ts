@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-01/images/reddit.jpg";
-const TITLE = "Deployed LTX-2 video generation to GH200 and merged 4 community apps";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-02/images/reddit.jpg";
+const TITLE = "Added Wan 2.7 images, upgraded OpenAI audio, and fixed API key caching.";
 export {LINK, TITLE};
