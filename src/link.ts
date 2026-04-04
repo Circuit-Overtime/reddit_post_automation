@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-02/images/reddit.jpg";
-const TITLE = "Added Wan 2.7 images, upgraded OpenAI audio, and fixed API key caching.";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-03/images/reddit.jpg";
+const TITLE = "SDK audio overhaul, image editing, and programmatic API keys";
 export {LINK, TITLE};
