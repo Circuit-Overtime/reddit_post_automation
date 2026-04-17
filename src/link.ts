@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-15/images/reddit.jpg";
-const TITLE = "Merged today: Veo 3.1 Fast video model update, dashboard fixes, new games";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-16/images/reddit.jpg";
+const TITLE = "Shipped polli CLI for terminal access and new prompt-to-video showcase";
 export {LINK, TITLE};
