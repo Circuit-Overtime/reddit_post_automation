@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-21/images/reddit.jpg";
-const TITLE = "Infrastructure update: Claude Opus 4.7, Qwen3-TTS, and killing orphan Windows processes";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-04-22/images/reddit.jpg";
+const TITLE = "Added gpt-image-2 via Azure eastus2 and fixed upstream error handling";
 export {LINK, TITLE};
