@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-05-15/images/reddit.jpg";
-const TITLE = "Added GPT-5.4-mini, Mistral 4, and fixed upstream 500 errors";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/weekly/2026-05-17/images/reddit.jpg";
+const TITLE = "Weekly infra update: dev earnings dashboard, accurate 4xx errors, model routing";
 export {LINK, TITLE};
