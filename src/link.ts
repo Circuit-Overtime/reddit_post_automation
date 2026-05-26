@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/weekly/2026-05-24/images/reddit.jpg";
-const TITLE = "55 PRs merged: Video start/end frames, audio diarization, and Gemini 3.5 Flash";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-05-25/images/reddit.jpg";
+const TITLE = "Added Helix AI to the chat endpoint routing (PR #11291)";
 export {LINK, TITLE};
