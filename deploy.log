@@ -2,7 +2,7 @@
 ✓ link.ts is already configured
 ✓ Waiting 5 seconds for file sync...
 📤 Step 2: Starting playtest mode...
- ›   Warning: @devvit/cli update available from 0.12.10 to 0.12.17.
+ ›   Warning: @devvit/cli update available from 0.12.10 to 0.13.0.
 📝 Step 3: Triggering update (modify main.ts)...
 📊 Step 4: Watching for successful image post...
 
@@ -53,15 +53,16 @@ Updating...
 [G[1A[JUpdating... ⣻
 [G[1A[JUpdating... ⢿
 [G[1A[JUpdating... ⡿
+[G[1A[JUpdating... ⣟
 [G[1A[JUpdating... Success!
 ┌────────────────────────────────────────────────────────────────────┐
 │ ✓ Playtest ready                                                   │
 │ ➜ URL: https://www.reddit.com/r/pollinations_ai/?playtest=polli-ai │
-│ ➜ Version: v0.0.76.99                                              │
+│ ➜ Version: v0.0.76.100                                             │
 │ ➜ Open the URL above and refresh to see your latest changes.       │
 └────────────────────────────────────────────────────────────────────┘
 🚀 Starting to post image to Reddit...
-✅ Image uploaded to Devvit Media Service: https://i.redd.it/zyhg5r3qbp4h1.jpeg
+✅ Image uploaded to Devvit Media Service: https://i.redd.it/hnn858ttcw4h1.jpeg
 
 ✅ 1 minute elapsed. Shutting down...
 
