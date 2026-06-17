@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-06-15/images/reddit.jpg";
-const TITLE = "Ideogram 4.0 models added, embed auth bridge, and UI fixes";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-06-16/images/reddit.jpg";
+const TITLE = "Fixed Gemini routing, localhost redirects, and reverted the elevator game";
 export {LINK, TITLE};
