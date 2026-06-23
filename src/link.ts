@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-06-17/images/reddit.jpg";
-const TITLE = "Load balancer tweaks, GLM-5.2 upgrade, and text routing fixes";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-06-22/images/reddit.jpg";
+const TITLE = "Audio update: Stable Audio 2.5, ElevenLabs SFX, and cheaper TTS.";
 export {LINK, TITLE};
