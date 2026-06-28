@@ -1,3 +1,3 @@
-const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/daily/2026-06-26/images/reddit.jpg";
-const TITLE = "Fixed pollen top-up quest tracking and added REKTY AI bot";
+const LINK = "https://raw.githubusercontent.com/pollinations/pollinations/news/social/news/weekly/2026-06-28/images/reddit.jpg";
+const TITLE = "Infrastructure update: Stable Audio 3, ElevenLabs SFX, and replacing tiers with Quests";
 export {LINK, TITLE};
